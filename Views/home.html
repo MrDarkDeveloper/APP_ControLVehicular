@@ -1,0 +1,150 @@
+<div class="home-title mb-5 mt-4">
+    <h1 class="text-center text-white" style="font-size: 50px;">Control Vehicular</h1>
+    <div class="bg-white home-deco"></div>
+</div>
+
+<div class="recent-entries">
+
+</div>
+<div class="buttons-content">
+
+</div>
+<article class="graphic mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="hour-vehicles-title">Vehiculos por hora</h3>
+        <button id="exportButton" style="background: #008A7F;" class="btn text-white">Exportar a Excel</button>
+    </div>
+    <canvas id="myChart" class="bg-white"></canvas>
+</article>
+<script>
+    actualView = "Recent";
+    loadPartialView("Modules/entry_model", document.querySelector('.recent-entries'));
+    loadPartialView("Modules/redirect_buttons", document.querySelector('.buttons-content'));
+
+    getEntries(actualView);
+
+    var timeRanges = [
+        { name: "6:00 - 7:00", start: "6:00:00", end: "7:00:00" },
+        { name: "7:00 - 8:00", start: "7:00:00", end: "8:00:00" },
+        { name: "8:00 - 9:00", start: "8:00:00", end: "9:00:00" },
+        { name: "9:00 - 10:00", start: "9:00:00", end: "10:00:00" },
+        { name: "10:00 - 11:00", start: "10:00:00", end: "11:00:00" },
+        { name: "11:00 - 12:00", start: "11:00:00", end: "12:00:00" },
+        { name: "12:00 - 13:00", start: "12:00:00", end: "13:00:00" },
+        { name: "13:00 - 14:00", start: "13:00:00", end: "14:00:00" },
+        { name: "14:00 - 15:00", start: "14:00:00", end: "15:00:00" },
+        { name: "15:00 - 16:00", start: "15:00:00", end: "16:00:00" },
+        { name: "16:00 - 17:00", start: "16:00:00", end: "17:00:00" },
+        { name: "17:00 - 18:00", start: "17:00:00", end: "18:00:00" },
+        { name: "18:00 - 19:00", start: "18:00:00", end: "19:00:00" },
+        { name: "19:00 - 20:00", start: "19:00:00", end: "20:00:00" },
+        { name: "20:00 - 21:00", start: "20:00:00", end: "21:00:00" },
+        { name: "21:00 - 22:00", start: "21:00:00", end: "22:00:00" },
+        { name: "22:00 - 23:00", start: "22:00:00", end: "23:00:00" }
+    ];
+
+    var counters = {};
+    timeRanges.forEach(range => {
+        counters[range.name] = 0;
+    });
+
+    // Datos iniciales para el gráfico
+    var data = {
+        labels: ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00', '22:00 - 23:00'],
+        datasets: [{
+            label: 'Vehículos por Hora',
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Inicialmente todos los valores son 0
+            backgroundColor: 'rgba(255, 99, 132, 0.2)', // Color de fondo de las barras
+            borderColor: 'rgba(255, 99, 132, 1)', // Color del borde de las barras
+            borderWidth: 1 // Ancho del borde de las barras
+        }]
+    };
+
+    // Configuración del gráfico
+    var config = {
+        type: 'bar',
+        data: data,
+    };
+
+    // Crear el gráfico inicial
+    var myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+
+    function fetchAndUpdateChart() {
+        $.ajax({
+            url: "https://api-controlvehicular.onrender.com/vehicleEntries?type=All" ,
+            method: "GET",
+            contentType: "application/json",
+            success: function (response) {
+                // Reiniciar los contadores
+                timeRanges.forEach(range => {
+                    counters[range.name] = 0;
+                });
+
+                // Iterar sobre los objetos y verificar el rango
+                response.forEach(obj => {
+                    timeRanges.forEach(range => {
+                        if (obj.time >= range.start && obj.time < range.end) {
+                            counters[range.name]++;
+                        }
+                    });
+                });
+
+                // Actualizar los datos del gráfico
+                myChart.data.datasets[0].data = [
+                    counters["6:00 - 7:00"],
+                    counters["7:00 - 8:00"],
+                    counters["8:00 - 9:00"],
+                    counters["9:00 - 10:00"],
+                    counters["10:00 - 11:00"],
+                    counters["11:00 - 12:00"],
+                    counters["12:00 - 13:00"],
+                    counters["13:00 - 14:00"],
+                    counters["14:00 - 15:00"],
+                    counters["15:00 - 16:00"],
+                    counters["16:00 - 17:00"],
+                    counters["17:00 - 18:00"],
+                    counters["18:00 - 19:00"],
+                    counters["19:00 - 20:00"],
+                    counters["20:00 - 21:00"],
+                    counters["21:00 - 22:00"],
+                    counters["22:00 - 23:00"],
+                ];
+
+                // Volver a dibujar el gráfico
+                myChart.update();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error al cargar los datos: ', error);
+            }
+        });
+    }
+
+    setInterval(fetchAndUpdateChart, 10000);
+
+    // Llamar a fetchAndUpdateChart inmediatamente para cargar los datos iniciales
+    fetchAndUpdateChart();
+
+    function exportToExcel() {
+        // Crear una hoja de trabajo con los datos
+        var ws = XLSX.utils.json_to_sheet([
+            { Hora: '14:00 - 15:00', Ventas: counters["14:00 - 15:00"] },
+            { Hora: '15:00 - 16:00', Ventas: counters["15:00 - 16:00"] },
+            { Hora: '16:00 - 17:00', Ventas: counters["16:00 - 17:00"] },
+            { Hora: '17:00 - 18:00', Ventas: counters["17:00 - 18:00"] },
+        ]);
+
+        // Crear un nuevo libro de trabajo
+        var wb = XLSX.utils.book_new();
+        // Agregar la hoja de trabajo al libro de trabajo
+        XLSX.utils.book_append_sheet(wb, ws, 'Vehiculos por hora');
+
+        // Exportar el libro de trabajo como archivo Excel
+        XLSX.writeFile(wb, 'vehiculos_por_hora.xlsx');
+    }
+
+    // Asignar la función al botón de exportación
+    document.getElementById('exportButton').addEventListener('click', exportToExcel);
+</script>

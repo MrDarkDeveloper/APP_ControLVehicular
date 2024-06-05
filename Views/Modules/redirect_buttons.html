@@ -1,0 +1,23 @@
+<div class="redirect-buttons d-flex justify-content-center gap-3 mb-3">
+    <button class="btn btn-primary studentBtn">Student entries</button>
+    <button class="btn btn-primary teacherBtn">Teacher entries</button>
+    <button class="btn btn-primary visitBtn">Visit entries</button>
+    <button class="btn btn-primary allBtn">All entries</button>
+</div>
+<script>
+    document.querySelector('.studentBtn').addEventListener('click', function(){
+        loadPartialView("student_entries", document.querySelector('.app'));
+    });
+
+    document.querySelector('.teacherBtn').addEventListener('click', function(){
+        loadPartialView("teacher_entries", document.querySelector('.app'));
+    });
+    
+    document.querySelector('.visitBtn').addEventListener('click', function(){
+        loadPartialView("visit_entries", document.querySelector('.app'));
+    });
+
+    document.querySelector('.allBtn').addEventListener('click', function(){
+        loadPartialView("all_entries", document.querySelector('.app'));
+    });
+</script>

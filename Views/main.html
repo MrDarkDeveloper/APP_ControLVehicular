@@ -1,0 +1,95 @@
+<header class="d-flex justify-content-between px-5">
+    <img src="Public/media/uttnlogo.png" alt="" class="image-home">
+    <div class="d-flex gap-5 align-items-center">
+        <button class="logout btn btn-danger logout">Cerrar sesion</button>
+    <button style="background: #008A7F;" class="btn d-flex align-self-center px-3 py-0 text-white" type="button"
+        data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+        <i class="bi bi-list fw-bold fs-3"></i>
+    </button>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Control vehicular</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body position-relative">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false"
+                            aria-controls="flush-collapseOne">
+                            Entradas
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse"
+                        data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body d-flex flex-column gap-2">
+                            <button style="background: #008A7F;" class="btn text-white students-entries">Alumnos</button>
+                            <button style="background: #008A7F;" class="btn text-white teachers-entries">Maestros</button>
+                            <button style="background: #008A7F;" class="btn text-white visits-entries">Visitantes</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseThree" aria-expanded="false"
+                            aria-controls="flush-collapseThree">
+                            Administracion
+                        </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse"
+                        data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body d-flex flex-column gap-2">
+                            <button style="background: #008A7F;" class="btn text-white">Guardias</button>
+                            <button style="background: #008A7F;" class="btn text-white">Agregar guardia</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseFour" aria-expanded="false"
+                            aria-controls="flush-collapseThree">
+                            Informacion
+                        </button>
+                    </h2>
+                    <div id="flush-collapseFour" class="accordion-collapse collapse"
+                        data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body d-flex flex-column gap-2">
+                            <button style="background: #008A7F;" class="btn text-white">Estudiantes</button>
+                            <button style="background: #008A7F;" class="btn text-white">Profesores</button>
+                            <button style="background: #008A7F;" class="btn text-white">Visitas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</header>
+<article class="app">
+
+</article>
+<script>
+    if(document.querySelector('.app')){
+        loadPartialView("home", document.querySelector('.app'));
+    }
+
+    document.querySelector('.logout').addEventListener('click', function(){
+        logout();
+    })
+
+    document.querySelector('.image-home').addEventListener('click', function(){
+        loadPartialView('home', document.querySelector('.app'));
+    })
+
+    document.querySelector('.students-entries').addEventListener('click', function(){
+        loadPartialView('student_entries', document.querySelector('.app'));
+    })
+
+    document.querySelector('.teachers-entries').addEventListener('click', function(){
+        loadPartialView('teacher_entries', document.querySelector('.app'));
+    })
+</script>

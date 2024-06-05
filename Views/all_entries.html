@@ -1,0 +1,12 @@
+<section class="all-entries">
+
+</section>
+<div class="buttons-content">
+
+</div>
+<script>
+    actualView = "All";
+    loadPartialView("Modules/entry_model", document.querySelector('.all-entries'));
+    loadPartialView("Modules/redirect_buttons", document.querySelector('.buttons-content'));
+    getEntries(actualView);
+</script>

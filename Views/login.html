@@ -1,0 +1,53 @@
+<section class="login-div bg-white mx-auto">
+    <div class="login-header text-center d-flex align-items-center justify-content-center">
+        <h2 class="login-title text-white fw-bold">Control Vehicular</h2>
+    </div>
+    <form class="login-body p-3 login">
+        <div class="login-inputs mb-3 d-flex flex-column gap-3">
+            <div class="login-input d-flex flex-column">
+                <label for="email" class="text-center">Correo</label>
+                <div class="input-div d-flex justify-content-center">
+                    <i class="bi bi-envelope-fill d-flex bg-success px-4 py-1 align-items-center fs-3"></i>
+                    <input type="text" placeholder="Introduce el correo" class="border-success form-control fs-5"
+                        id="email">
+                </div>
+            </div>
+            <div class="login-input d-flex flex-column">
+                <label for="password" class="text-center">Contrasena</label>
+                <div class="input-div d-flex justify-content-center">
+                    <i class="bi bi-unlock-fill d-flex bg-success px-4 py-1 align-items-center fs-3"></i>
+                    <input type="text" placeholder="Introduce la contrasena" class="border-success form-control fs-5"
+                        id="password">
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-primary text-decoration-underline">Olvide mi contrasena</p>
+        <div class="login-captcha mb-3 d-flex justify-content-center">
+            <!-- <div class="g-recaptcha" data-sitekey="6Lc4P-0pAAAAAFuxfLNndqk_z3UrZ56bUI0gPtOU"></div> -->
+        </div>
+        <div class="login-submit d-flex justify-content-center gap-5">
+            <button type="submit" class="btn btn-success">Iniciar sesion</button>
+            <button type="reset" class="btn btn-danger">Borrar</button>
+        </div>
+    </form>
+</section>
+<script>
+    document.querySelector('.login').addEventListener('submit', (e) => {
+        e.preventDefault();
+        var email = $('#email').val();
+        var password = $('#password').val();
+
+        if (!email || !password) {
+            showAlert("warning", "Usuario y contraseña son requeridos");
+            return;
+        }
+
+        var loginData = {
+            email: email,
+            password: password
+        }
+
+        login(loginData);
+
+    })
+</script>
