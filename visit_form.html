@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de QR</title>
+    <link rel="stylesheet" href="Public/css/visit_form.css">
+    <link rel="stylesheet" href="Public/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Public/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="Public/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrious"></script>
+    <script src="Public/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="Public/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="Public/js/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="visit-content">
+        <header class="d-flex justify-content-center">
+            <img src="Public/media/uttnlogo.png" alt="" class="img-fluid">
+        </header>
+        <div class="cards mt-5 d-flex mx-auto gap-5 justify-content-center">
+            <div class="card qr-info">
+                <div class="card-header">
+                    <h4>Instrucciones</h4>
+                </div>
+                <div class="card-body">
+                    <p>En el siguiente formulario, usted deberá llenarlo con su nombre, la razón de visita a la
+                        Universidad y el modelo de su carro con el que entrará. Al llenarlo, generará un QR, el cual
+                        usará para escanearlo en la entrada de la Universidad y poder registrar su entrada y poder
+                        entrar.</p>
+                    <p><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i><span class="text-warning">NOTA:
+                        </span>Llene el formulario con datos verídicos y reales.</p>
+                </div>
+            </div>
+            <div class="qr-action d-flex justify-content-center gap-5 mb-5">
+                <div class="card qr-form-div">
+                    <div class="card-header">
+                        <h3 class="text-center">Formulario para visitas</h3>
+                    </div>
+                    <form id="visitorForm" class="card-body">
+                        <div class="inputs-visit d-flex flex-column gap-3 mx-auto text-center fw-bold">
+                            <label for="name">Nombre:</label>
+                            <input type="text" id="name" name="name" class="form-control">
+                            <label for="reason">Razón de Visita:</label>
+                            <textarea id="reason" name="reason" class="form-control"
+                                style="max-height: 100px; min-height: 100px;"></textarea>
+                            <label for="carModel">Modelo de Carro:</label>
+                            <select name="carModel" id="carModel" class="form-select">
+                                <option value="Default" selected>Seleccionar modelo</option>
+                                <option value="Versa">Versa</option>
+                                <option value="Focus">Focus</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Bocho">Bocho</option>
+                            </select>
+                        </div>
+                        <div class="button-visit d-flex justify-content-center gap-3 mt-3">
+                            <button type="button" onclick="generateQR()" class="btn btn-success">Generar visita</button>
+                            <button type="reset" onclick="resetQR()" class="btn btn-danger">Resetear</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card qr-form-generate">
+                    <div class="card-header">
+                        <h3 class="text-center">QR Generado</h3>
+                    </div>
+                    <div class="card-body d-flex justify-content-center flex-column gap-3 align-items-center">
+                        <div id="qrCode" class="rounded"></div>
+                        <button id="downloadBtn" class="btn btn-success" onclick="downloadImage()">Descargar imagen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Public/js/index.js"></script>
+    <script>
+        function generateQR() {
+            var name = document.getElementById('name').value;
+            var reason = document.getElementById('reason').value;
+            var carModel = document.getElementById('carModel').value;
+
+            if(name == "" || reason == "" || carModel == "Default"){
+                showAlert("error", "Debes llenar todos");
+                return;
+            }
+            var formData = {
+                name: document.getElementById('name').value,
+                reason: document.getElementById('reason').value,
+                carModel: document.getElementById('carModel').value
+            };
+
+            console.log("Form Data:", formData);
+
+            var jsonString = JSON.stringify(formData);
+            console.log("JSON String:", jsonString);
+
+            // Crear instancia de QRious
+            var qr = new QRious({
+                value: jsonString,
+                size: 300
+            });
+
+            // Crear un elemento de imagen
+            var img = document.createElement('img');
+            img.src = qr.toDataURL(); // Convertir el QR en un URL de imagen
+            img.id = "generatedQRCode";
+
+            // Limpiar el contenedor del QR y agregar la imagen
+            var qrCodeDiv = document.getElementById('qrCode');
+            qrCodeDiv.innerHTML = ''; // Limpiar el contenido actual
+            qrCodeDiv.appendChild(img); // Agregar la imagen al div
+        }
+
+        function downloadImage() {
+            var qrImage = document.getElementById('generatedQRCode');
+            if (qrImage) {
+                var link = document.createElement('a');
+                link.href = qrImage.src;
+                link.download = 'QR_Code.png'; // Nombre del archivo de descarga
+                link.click();
+            }
+            else{
+                showAlert("error", "Debes generar primero un QR");
+            }
+        }
+
+        function resetQR(){
+            document.getElementById('qrCode').innerHTML = '';
+        }
+    </script>
+</body>
+
+</html>

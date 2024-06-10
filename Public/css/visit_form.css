@@ -1,0 +1,62 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: url(../media/uttnedited.jpg);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#qrCode {
+    width: 300px;
+    height: 300px;
+    border: 1px solid black;
+}
+
+.visit-content{
+    header{
+        height: 80px;
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 10px 5px;
+    }
+
+    .cards{
+        width: 80%;
+        flex-wrap: wrap;
+
+        .qr-info{
+            width: 100%;
+        }
+
+        .qr-action{
+            width: 100%;
+            margin-bottom: 70px;
+
+            .qr-form-div{
+                width: 70%;
+
+                .inputs-visit{
+                    width: 80%;
+                }
+
+            }
+
+            .qr-form-generate{
+                width: 30%;
+            }
+        }
+    }
+}
+
+
+
+

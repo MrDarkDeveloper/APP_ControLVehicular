@@ -20,7 +20,7 @@ hr {
     padding-bottom: 50px;
 
     header {
-        height: 80px;
+        height: 100px;
         position: sticky;
         top: 0;
         z-index: 1030;
