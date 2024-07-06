@@ -12,7 +12,10 @@
 <article class="graphic mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="hour-vehicles-title">Vehiculos por hora</h3>
-        <button id="exportButton" style="background: #008A7F;" class="btn text-white">Exportar a Excel</button>
+        <div class="d-flex gap-3 align-items-center">
+            <input type="date" id="datePicker" class="form-control">
+            <button id="updateChartButton" class="btn text-white" style="background: #008A7F;">Buscar</button>
+        </div>
     </div>
     <canvas id="myChart" class="bg-white"></canvas>
 </article>
@@ -50,10 +53,10 @@
 
     // Datos iniciales para el gráfico
     var data = {
-        labels: ['6:00 - 7:00', '7:00 - 8:00', '8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00', '22:00 - 23:00'],
+        labels: timeRanges.map(range => range.name),
         datasets: [{
             label: 'Vehículos por Hora',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Inicialmente todos los valores son 0
+            data: timeRanges.map(() => 0), // Inicialmente todos los valores son 0
             backgroundColor: 'rgba(255, 99, 132, 0.2)', // Color de fondo de las barras
             borderColor: 'rgba(255, 99, 132, 1)', // Color del borde de las barras
             borderWidth: 1 // Ancho del borde de las barras
@@ -72,12 +75,13 @@
         config
     );
 
-    function fetchAndUpdateChart() {
+    function fetchAndUpdateChart(date) {
         $.ajax({
-            url: "https://api-controlvehicular.onrender.com/vehicleEntries?type=All" ,
+            url: `http://localhost:3000/vehicleEntries/entriesByDate?date=${date}`,
             method: "GET",
             contentType: "application/json",
             success: function (response) {
+                console.error(response);
                 // Reiniciar los contadores
                 timeRanges.forEach(range => {
                     counters[range.name] = 0;
@@ -93,25 +97,7 @@
                 });
 
                 // Actualizar los datos del gráfico
-                myChart.data.datasets[0].data = [
-                    counters["6:00 - 7:00"],
-                    counters["7:00 - 8:00"],
-                    counters["8:00 - 9:00"],
-                    counters["9:00 - 10:00"],
-                    counters["10:00 - 11:00"],
-                    counters["11:00 - 12:00"],
-                    counters["12:00 - 13:00"],
-                    counters["13:00 - 14:00"],
-                    counters["14:00 - 15:00"],
-                    counters["15:00 - 16:00"],
-                    counters["16:00 - 17:00"],
-                    counters["17:00 - 18:00"],
-                    counters["18:00 - 19:00"],
-                    counters["19:00 - 20:00"],
-                    counters["20:00 - 21:00"],
-                    counters["21:00 - 22:00"],
-                    counters["22:00 - 23:00"],
-                ];
+                myChart.data.datasets[0].data = timeRanges.map(range => counters[range.name]);
 
                 // Volver a dibujar el gráfico
                 myChart.update();
@@ -122,29 +108,12 @@
         });
     }
 
-    setInterval(fetchAndUpdateChart, 10000);
-
-    // Llamar a fetchAndUpdateChart inmediatamente para cargar los datos iniciales
-    fetchAndUpdateChart();
-
-    function exportToExcel() {
-        // Crear una hoja de trabajo con los datos
-        var ws = XLSX.utils.json_to_sheet([
-            { Hora: '14:00 - 15:00', Ventas: counters["14:00 - 15:00"] },
-            { Hora: '15:00 - 16:00', Ventas: counters["15:00 - 16:00"] },
-            { Hora: '16:00 - 17:00', Ventas: counters["16:00 - 17:00"] },
-            { Hora: '17:00 - 18:00', Ventas: counters["17:00 - 18:00"] },
-        ]);
-
-        // Crear un nuevo libro de trabajo
-        var wb = XLSX.utils.book_new();
-        // Agregar la hoja de trabajo al libro de trabajo
-        XLSX.utils.book_append_sheet(wb, ws, 'Vehiculos por hora');
-
-        // Exportar el libro de trabajo como archivo Excel
-        XLSX.writeFile(wb, 'vehiculos_por_hora.xlsx');
-    }
-
-    // Asignar la función al botón de exportación
-    document.getElementById('exportButton').addEventListener('click', exportToExcel);
+    document.getElementById('updateChartButton').addEventListener('click', function () {
+        var date = document.getElementById('datePicker').value;
+        if (date) {
+            fetchAndUpdateChart(date);
+        } else {
+            showAlert("warning", "Seleccione una fecha valida");
+        }
+    });
 </script>

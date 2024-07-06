@@ -56,10 +56,11 @@ function getVisitEntries() {
 
 function getEntriesByName(value, type) {
     $.ajax({
-        url: env + `/vehicleEntries/filter?name=${value}&type=${type}`,
+        url: env + `/vehicleEntries/filter?word=${value}&type=${type}`,
         method: "GET",
         contentType: "application/json",
         success: function (response) {
+            console.error(response);
             loadData(response);
             console.log(actualView);
         },
@@ -83,6 +84,36 @@ function getEntriesByHour(start, end, type) {
 
     })
 }
+
+function getEntriesByDate(date, type){
+    $.ajax({
+        url: env + `/vehicleEntries/filterByDate?date=${date}&type=${type}`,
+        method: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            loadData(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+}
+
+function getEntriesByDateTime(start, end, type, date) {
+    $.ajax({
+        url: env + `/vehicleEntries/filterByDateTime?start=${start}&end=${end}&type=${type}&date=${date}`,
+        method: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            loadData(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+
+    })
+}
+
 
 function loadData(data) {
     let ul = document.querySelector('.entries-list');

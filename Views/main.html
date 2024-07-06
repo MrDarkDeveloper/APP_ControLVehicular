@@ -60,9 +60,7 @@
                     <div id="flush-collapseFour" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body d-flex flex-column gap-2">
-                            <button style="background: #008A7F;" class="btn text-white">Estudiantes</button>
-                            <button style="background: #008A7F;" class="btn text-white">Profesores</button>
-                            <button style="background: #008A7F;" class="btn text-white">Visitas</button>
+                            <button style="background: #008A7F;" class="btn text-white personal-view">Personal</button>
                         </div>
                     </div>
                 </div>
@@ -78,7 +76,8 @@
     }
 
     document.querySelector('.logout').addEventListener('click', function(){
-        logout();
+        window.localStorage.removeItem("user_id");
+        loadPartialView("login", document.querySelector('.content'));
     })
 
     document.querySelector('.image-home').addEventListener('click', function(){
@@ -91,5 +90,9 @@
 
     document.querySelector('.teachers-entries').addEventListener('click', function(){
         loadPartialView('teacher_entries', document.querySelector('.app'));
+    })
+
+    document.querySelector('.personal-view').addEventListener('click', function(){
+        loadPartialView('personalInfo', document.querySelector('.app'));
     })
 </script>

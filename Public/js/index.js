@@ -1,5 +1,6 @@
 let entryModel;
 let actualView;
+let personalModel, tableModel;
 
 function preloadModule(viewName) {
     return $.get('Views/Modules/' + viewName + '.html').then(html => $(html)[0]);
@@ -8,6 +9,22 @@ function preloadModule(viewName) {
 preloadModule("entry_element")
     .done(function (data) {
         entryModel = data;
+    })
+    .fail(function (xhr, status, error) {
+        console.error('Error al cargar módulo skills_data: ', error);
+    });
+
+preloadModule("personal_element")
+    .done(function (data) {
+        personalModel = data;
+    })
+    .fail(function (xhr, status, error) {
+        console.error('Error al cargar módulo skills_data: ', error);
+    });
+
+preloadModule("table_element")
+    .done(function (data) {
+        tableModel = data;
     })
     .fail(function (xhr, status, error) {
         console.error('Error al cargar módulo skills_data: ', error);

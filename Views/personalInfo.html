@@ -1,0 +1,26 @@
+<div class="card">
+    <section class="personal-buttons card-header d-flex justify-content-between align-items-center">
+        <h3>Estudiantes</h3>
+        <div>
+            <button class="students-info">Estudiantes</button>
+            <button class="teachers-info">Profesores</button>
+            <button class="visits-info">Visitas</button>
+        </div>
+    </section>
+    <section class="personal-div card-body">
+        <div class="personal-list d-flex flex-column gap-3">
+
+        </div>
+    </section>
+</div>
+<script>
+    GetStudents();
+
+    document.querySelector('.students-info').addEventListener('click', function(){
+        GetStudents();
+    })
+
+    document.querySelector('.teachers-info').addEventListener('click', function(){
+        GetTeachers();
+    })
+</script>

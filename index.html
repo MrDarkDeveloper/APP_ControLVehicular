@@ -17,17 +17,17 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/xlsx"></script> -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="Public/js/jquery-3.2.1.min.js"></script>
-
     <title>Control Vehicular</title>
 </head>
 <body>
     <div class="content">
-
+        
     </div>
     <script src="Public/js/index.js"></script>
     <script src="Routes/routes.js"></script>
     <script src="Controllers/entries_controller.js"></script>
     <script src="Controllers/auth_controller.js"></script>
+    <script src="Controllers/personal_controller.js"></script>
     <script>
         if (window.localStorage.getItem('user_id')) {
             loadPartialView('main', document.querySelector('.content'));

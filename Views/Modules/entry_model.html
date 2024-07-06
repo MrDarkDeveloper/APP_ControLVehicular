@@ -34,6 +34,8 @@
                         <option value="21:00:00-22:00:00">21:00 - 22:00</option>
                         <option value="22:00:00-23:00:00">22:00 - 23:00</option>
                     </select>
+                    <input type="date" name="" id="" class="form-control date-filter">
+                    <button class="btn btn-success hour-date-filter">Buscar</button>
                 </div>
             </div>
         </div>
@@ -96,12 +98,33 @@
         }
 
         var nameValue = $('.name-filter').val();
-
+        console.error(nameValue);
         getEntriesByName(nameValue, actualView);
     })
 
-    document.querySelector('.hour-filter').addEventListener('input', function(ev){
-        if(ev.target.value == "Sin filtrar"){
+    document.querySelector('.hour-date-filter').addEventListener('click', function(ev){
+        if(document.querySelector('.date-filter').value && document.querySelector('.hour-filter').value != "Sin filtrar"){
+            const values = document.querySelector('.hour-filter').value.split("-");
+            const start = values[0];
+            const end = values[1];
+
+            const date = document.querySelector('.date-filter').value;
+
+            getEntriesByDateTime(start, end, actualView, date);
+        }
+        else if(document.querySelector('.date-filter').value && document.querySelector('.hour-filter').value == "Sin filtrar"){
+            const date = document.querySelector('.date-filter').value;
+            
+            getEntriesByDate(date, actualView);
+        }
+        else if(!document.querySelector('.date-filter').value && document.querySelector('.hour-filter').value != "Sin filtrar"){
+            const values = document.querySelector('.hour-filter').value.split("-");
+            const start = values[0];
+            const end = values[1];
+
+            getEntriesByHour(start, end, actualView);
+        }
+        else if(!document.querySelector('.date-filter').value && document.querySelector('.hour-filter').value == "Sin filtrar"){
             if(actualView == "Student"){
                 getStudentEntries();
             }
@@ -114,13 +137,6 @@
             else{
                 getEntries(actualView);
             }
-        }
-        else{
-            const values = ev.target.value.split("-");
-            const start = values[0];
-            const end = values[1];
-            
-            getEntriesByHour(start, end, actualView);
         }
     })
 </script>

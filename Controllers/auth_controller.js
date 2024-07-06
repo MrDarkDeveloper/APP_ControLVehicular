@@ -12,18 +12,3 @@ function login(loginData) {
         }
     })
 }
-
-function logout(){
-    $.ajax({
-        url: env + "/auth/logout",
-        method: "POST",
-        contentType: "application/json",
-        success: function(response) {
-            window.localStorage.removeItem("user_id");
-            loadPartialView('login', document.querySelector('.content'));
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    })
-}
