@@ -125,6 +125,7 @@ function loadData(data) {
         li.querySelector('.nombre').innerText = entry.person.name;
         li.querySelector('.tipo').innerText = entry.type;
         li.querySelector('.hora').innerText = entry.time;
+        li.querySelector('.fecha').innerText = entry.date;
         if (entry.type == "Visit") {
             li.querySelector('.student-teacher').style.display = "none";
             li.querySelector('.visit').style.display = "flex";

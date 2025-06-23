@@ -18,7 +18,14 @@ body {
     border: 1px solid black;
 }
 
-.visit-content{
+#qr{
+    margin: auto;
+    width: 200px;
+    height: 200px;
+    border: 1px solid black;
+}
+
+.visit-content, .qr-content{
     header{
         height: 80px;
         position: sticky;

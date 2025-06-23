@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Public/css/qr_styles.css">
+    <link rel="stylesheet" href="Public/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Public/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="Public/sweetalert2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrious"></script>
+    <script src="Public/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="Public/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="Public/js/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <div class="qr-content">
+        <header class="d-flex justify-content-center">
+            <img src="Public/media/uttnlogo.png" alt="" class="img-fluid">
+        </header>
+        <div class="card mt-5" style="width: 40%; margin: auto;">
+            <div class="card-header">
+                <h4 class="text-center">Obtener QR de Acceso</h4>
+            </div>
+            <div class="card-body">
+                <form action="" class="generateQRAccess d-flex flex-column justify-content-center gap-3">
+                    <label for="" class="text-center">Matrícula</label>
+                    <input type="text" name="" id="matricula" class="form-control text-center">
+                    <button type="submit" class="btn btn-primary" style="width: 40%; margin: auto;">Generar QR</button>
+                </form>
+            </div>
+            <div class="card-footer p-3 d-flex flex-column justify-content-center gap-2">
+                <div id="qr" class="rounded">
+
+                </div>
+                <button id="downloadQR" class="btn btn-success" onclick="downloadQR()" style="width: 40%; margin: auto;">Descargar
+                    QR</button>
+            </div>
+        </div>
+    </div>
+    <script src="Public/js/index.js"></script>
+    <script src="Routes/routes.js"></script>
+    <script>
+        document.querySelector('.generateQRAccess').addEventListener('submit', function (e) {
+            e.preventDefault();
+            let matricula = document.querySelector('#matricula').value;
+            getPerson(matricula);
+        })
+
+        function getPerson(matricula) {
+            $.ajax({
+                url: env + `/verify/getPerson?matricula=${matricula}`,
+                method: "GET",
+                contentType: "application/json",
+                success: function (response) {
+                    generateQRAccess(response);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+        function generateQRAccess(response) {
+
+            var formData = {
+                schoolId: response.data.schoolId,
+                type: response.type
+            };
+            // Crear instancia de QRious
+            var qr = new QRious({
+                value: JSON.stringify(formData),
+                size: 200
+            });
+
+            // Crear un elemento de imagen
+            var img = document.createElement('img');
+            img.src = qr.toDataURL(); // Convertir el QR en un URL de imagen
+            img.id = "generatedQRCode";
+
+            // Limpiar el contenedor del QR y agregar la imagen
+            var qrCodeDiv = document.getElementById('qr');
+            qrCodeDiv.innerHTML = ''; // Limpiar el contenido actual
+            qrCodeDiv.appendChild(img); // Agregar la imagen al div
+        }
+
+        function downloadQR() {
+            var qrImage = document.getElementById('generatedQRCode');
+            if (qrImage) {
+                var link = document.createElement('a');
+                link.href = qrImage.src;
+                link.download = 'QR_Code.png'; // Nombre del archivo de descarga
+                link.click();
+            }
+            else{
+                showAlert("error", "Debes generar primero un QR");
+            }
+        }
+    </script>
+</body>
+
+</html>

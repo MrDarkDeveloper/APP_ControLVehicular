@@ -48,7 +48,7 @@ function LoadPeople(response){
         let li = personalModel.cloneNode(true);
         let className = person.name.split(" ").join("-");
         li.querySelector('.person-name').innerText = person.name;
-        li.querySelector('.person-id').innerText = person.studentId ? person.studentId : "NA";
+        li.querySelector('.person-id').innerText = person.schoolId;
         li.querySelector('.person-rfid').innerText = person.rfidId;
         li.querySelector('.show-entries').classList.add(className);
         li.querySelector('.entries-info').classList.add("person-" + className);
